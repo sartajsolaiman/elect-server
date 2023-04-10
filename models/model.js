@@ -11,4 +11,6 @@ const userSchema = mongoose.Schema({
 });
 
 //save in collection
-const model =  mongoose.model("Demo",userSchema)
+const model =  mongoose.model("Demo",userSchema);
+
+module.exports = model;
