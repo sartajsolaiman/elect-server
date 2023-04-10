@@ -1,13 +1,19 @@
 //importing express and keeping into express class
 const express = require("express");
 
+
 //creating express instance into app 
 const app = express();
 
+const cors = require('cors');
+
+app.use(cors());
+
 //importing mongoose and body parser
 const mongoose = require("mongoose");
+const routes = require("./routes/auth");
 const bodyParser = require("body-parser");
-require("./collections/collection");
+require("./routes/auth");
 
 //connecting mongodb
 main()
@@ -22,7 +28,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 
 //port no
-const PORT = 1337;
+const PORT = 3000;
 
 //root route access message
 app.get("/", (req,res) => {
@@ -34,7 +40,10 @@ app.get("/about", (req,res) => {
     res.send("This is the about route");
 })
 
+app.use('/api/auth',routes);
+
 
 //port access using app listen and opening server
-app.listen(PORT,() => console.log("server listening into port no" + PORT));
+app.listen(PORT,() => console.log("server listening into http://localhost:"+PORT));
+
 

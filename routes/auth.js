@@ -1,18 +1,18 @@
-const express = require("express");
-const app = express();
 const { default: mongoose } = require("mongoose");
-const collection = require("../models/model");
+const collection = require("../models/userModel");
+const router = require('express').Router();
 
 const user = mongoose.model("Demo");
 
 //posting data in mongodb
-app.post("/register", async(req,res) => {
-  const{username,password,email} = req.body;
+router.post("/register", async(req,res) => {
+  const{firstName, lastName, email, password} = req.body;
   try{
     await user.create({
-      username:username,
-      password:password,
-      email:email,
+        firstname:firstName,
+        lastname:lastName,
+        email:email,
+        password:password
     });
     res.send({status:"Ok"});
   }catch(error){
@@ -21,7 +21,7 @@ app.post("/register", async(req,res) => {
 });
 
 //fetching data from mongodb
-app.get("/getUser", async(req,res) => {
+router.get("/getUser", async(req,res) => {
   try {
     const alluser = await user.find({});
     res.send({status:"Ok", data:alluser})
@@ -30,3 +30,4 @@ app.get("/getUser", async(req,res) => {
   }
 });
 
+module.exports = router
