@@ -1,5 +1,6 @@
 //importing express and keeping into express class
 const express = require("express");
+require('dotenv').config()
 
 
 //creating express instance into app 
@@ -14,6 +15,8 @@ const mongoose = require("mongoose");
 const routes = require("./routes/auth");
 const bodyParser = require("body-parser");
 require("./routes/auth");
+const handleError = require('./handler/error');
+const sendMail = require("./middlewares/sendMail");
 
 //connecting mongodb
 main()
@@ -27,23 +30,31 @@ async function main() {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 
-//port no
-const PORT = 3000;
-
 //root route access message
 app.get("/", (req,res) => {
   res.send("Hello World beautiful people");
 });
 
-//about route access message
-app.get("/about", (req,res) => {
-    res.send("This is the about route");
-})
-
 app.use('/api/auth',routes);
+app.use('/api/mail',sendMail);
+
+app.use((req, res, next) => {
+  let err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  return res.status(err.status || 500).json({
+    success: false,
+    error: {
+      message: err.message || 'Something went wrong.',
+    },
+  });
+});
 
 
 //port access using app listen and opening server
-app.listen(PORT,() => console.log("server listening into http://localhost:"+PORT));
+app.listen(process.env.PORT,() => console.log("server listening into http://localhost:"+process.env.PORT));
 
 
