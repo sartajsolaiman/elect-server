@@ -10,7 +10,7 @@ const optionSchema = new mongoose.Schema({
 
 const voterSchema = new mongoose.Schema({
     votermail: String,
-    voterid: String
+    // voterid: String
 });
 
 const pollSchema = mongoose.Schema({

@@ -28,7 +28,7 @@ routerPoll.post("/add_poll", async(req,res, next) => {
     //return res.status(201).json({poll.title});
 
     return res.status(201).json({
-        id
+        id, voter
     });
   }catch (err) {
     return next({

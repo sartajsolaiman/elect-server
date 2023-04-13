@@ -43,11 +43,11 @@ app.use('/api/auth',routeAuth);
 app.use('/api/poll',routePoll);
 app.use('/api/mail/',sendMail);
 
-app.use((req, res, next) => {
-  let err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use((req, res, next) => {
+//   let err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
 app.use((err, req, res, next) => {
   return res.status(err.status || 500).json({
