@@ -12,10 +12,9 @@ app.use(cors());
 
 //importing mongoose and body parser
 const mongoose = require("mongoose");
-const routes = require("./routes/auth");
+const routeAuth = require("./routes/auth");
+const routePoll = require("./routes/poll");
 const bodyParser = require("body-parser");
-require("./routes/auth");
-const handleError = require('./handler/error');
 const sendMail = require("./middlewares/sendMail");
 
 //connecting mongodb
@@ -30,13 +29,19 @@ async function main() {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 
+const voterEmail = [
+  "rizwanhrizvi@gmail.com",
+  "mdrizwanul-2018925355@cs.du.ac.bd"
+]
+
 //root route access message
 app.get("/", (req,res) => {
   res.send("Hello World beautiful people");
 });
 
-app.use('/api/auth',routes);
-app.use('/api/mail',sendMail);
+app.use('/api/auth',routeAuth);
+app.use('/api/poll',routePoll);
+app.use('/api/mail/',sendMail);
 
 app.use((req, res, next) => {
   let err = new Error('Not Found');

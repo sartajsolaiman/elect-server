@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const collection = require("../models/pollModel");
-const routerPoll = require('express').Router();
+const routerMail = require('express').Router();
 const jwt = require('jsonwebtoken');
 const e = require("express");
 
