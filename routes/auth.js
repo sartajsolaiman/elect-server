@@ -3,6 +3,7 @@ const collection = require("../models/userModel");
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const e = require("express");
+const checkLogin = require("../middlewares/checkLogin");
 
 const User = mongoose.model("Demo");
 
@@ -25,7 +26,7 @@ router.post("/register", async(req,res, next) => {
     });
   }catch (err) {
     if (err.code === 11000) {
-      err.message = 'Sorry, that username is already taken';
+      err.message = 'Sorry, that email is already taken';
     }
     return next({
       status: 400,
@@ -54,7 +55,7 @@ router.post("/login", async(req,res, next)  => {
     }
   } catch (err) {
     console.log(err);
-    return next({ status: 400, message: 'Invalid Username/Password' });
+    return next({ status: 400, message: 'Invalid E-mail/Password' });
   }
 });
 
@@ -79,6 +80,25 @@ router.post("/getuser", async(req,res, next) => {
   } catch (err) {
     console.log(err);
     return next({ status: 400, message: 'Invalid Username/Password' });
+  }
+});
+
+router.get("/polls", checkLogin, async(req,res, next) =>  {
+  console.log("first")
+  try {
+      const users = await User.findOne({
+        _id: req.id
+      }).populate("polls");
+      const {polls} = users
+
+      res.status(200).json({
+          polls
+      });
+  } catch (err) {
+      return next({
+        status: 400,
+        message: err.message,
+      })
   }
 });
 
