@@ -16,6 +16,11 @@ const routeAuth = require("./routes/auth");
 const routePoll = require("./routes/poll");
 const bodyParser = require("body-parser");
 const sendMail = require("./middlewares/sendMail");
+const confirmMail = require("./middlewares/confirmMail");
+const jwt = require('jsonwebtoken');
+const User = mongoose.model("Demo");
+
+let confrimation = false;
 
 //connecting mongodb
 main()
@@ -29,25 +34,11 @@ async function main() {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 
-const voterEmail = [
-  "rizwanhrizvi@gmail.com",
-  "mdrizwanul-2018925355@cs.du.ac.bd"
-]
-
-//root route access message
-app.get("/", (req,res) => {
-  res.send("Hello World beautiful people");
-});
-
 app.use('/api/auth',routeAuth);
 app.use('/api/poll',routePoll);
 app.use('/api/mail/',sendMail);
 
-// app.use((req, res, next) => {
-//   let err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
+
 
 app.use((err, req, res, next) => {
   return res.status(err.status || 500).json({

@@ -4,8 +4,10 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const e = require("express");
 const checkLogin = require("../middlewares/checkLogin");
+const nodemailer = require("nodemailer");
 
 const User = mongoose.model("Demo");
+
 
 //posting data in mongodb
 router.post("/register", async(req,res, next) => {
@@ -17,13 +19,47 @@ router.post("/register", async(req,res, next) => {
         password:req.body.password
     });
     const { id, firstname, lastname, email, password } = user;
-    const token = jwt.sign({ id, email }, process.env.SECRET);
+    // jwt.sign(
+    //   { id, email },
+    //    process.env.SECRET,
+    //    (err, emailToken) => {
+    //     const url = `http://localhost:3001/confirmation/${emailToken}`;
 
-    return res.status(201).json({
-      id,
-      email,
-      token,
-    });
+    //     transporter.sendMail({
+    //       to: email,
+    //       subject: 'Confirm Email',
+    //       html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
+    //     });
+    //   });
+
+       
+        const token = jwt.sign(
+          { id, email },
+           process.env.SECRET,
+        );
+
+        const url = `http://localhost:3001/api/auth/confirmation/${token}`;
+
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+              user: process.env.GMAIL_USER,
+              pass: process.env.GMAIL_PASS
+          }
+      });
+
+        await transporter.sendMail({
+          from: 'ElectMe<elect.me5160@gmail.com>',
+          to: email,
+          subject: 'Confirm Email',
+          html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
+        });
+
+      return res.status(201).json({
+        id,
+        email,
+        token
+      });
   }catch (err) {
     if (err.code === 11000) {
       err.message = 'Sorry, that email is already taken';
@@ -40,7 +76,9 @@ router.post("/login", async(req,res, next)  => {
     const user = await User.findOne({
       email: req.body.email,
     });
-    const { id, email } = user;
+    const { id, email, confirmed } = user;
+    console.log(confirmed)
+    
     const valid = await user.comparePassword(req.body.password);
 
     if (valid) {
@@ -99,6 +137,19 @@ router.get("/polls", checkLogin, async(req,res, next) =>  {
         status: 400,
         message: err.message,
       })
+  }
+});
+
+router.get('/confirmation/:token', async (req, res) => {
+  try {
+    const decoded = jwt.verify(req.params.token, process.env.SECRET);
+    const { id } = decoded;
+    await User.updateOne({_id: id},{ confirmed: true });
+    return res.status(200).json({
+      confirmation: 'ok'
+    })
+  } catch (e) {
+    res.send('error');
   }
 });
 

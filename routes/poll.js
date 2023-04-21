@@ -20,6 +20,12 @@ routerPoll.post("/add_poll", checkLogin, async(req,res, next) => {
     console.log(req.body.options)
     console.log(req.id);
   try{
+    const user = await User.findOne({
+      _id: req.id
+    });
+    if (!user.confirmed) {
+      throw new Error('Please confirm your email to login');
+    }
     const poll = await Poll.create({
         title: req.body.title,
         startTime: req.body.startTime,
@@ -34,7 +40,10 @@ routerPoll.post("/add_poll", checkLogin, async(req,res, next) => {
       
     }, {
       $push: {
-        polls: poll._id
+          polls: {
+            $each: [poll._id],
+            $position: 0
+          }
       }
     });
 

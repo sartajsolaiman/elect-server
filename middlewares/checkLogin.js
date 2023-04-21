@@ -4,6 +4,7 @@ const checkLogin = (req, res, next) => {
     
     
     let { authorization } = req.headers;
+    console.log(authorization)
     
     try {
         let token = authorization.split(' ')[1];

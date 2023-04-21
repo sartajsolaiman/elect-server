@@ -6,6 +6,10 @@ const userSchema = mongoose.Schema({
     firstname: {type: String , required: true},
     email: {type: String , required: true},
     password: {type: String , required: true},
+    confirmed: {
+      type: Boolean,
+      default: false
+    },
     polls: [
       {
         type: mongoose.Types.ObjectId,
