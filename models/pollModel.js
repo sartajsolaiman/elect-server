@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
-//const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+
+function generateRandomString(length) {
+  return crypto.randomBytes(Math.ceil(length/2)).toString('hex').slice(0, length);
+}
+
 const optionSchema = new mongoose.Schema({
     option: String,
     votes: {
@@ -10,7 +15,11 @@ const optionSchema = new mongoose.Schema({
 
 const voterSchema = new mongoose.Schema({
     votermail: String,
-    // voterid: String
+    voterid: String,
+    voted: {
+        type: Boolean,
+        default: false
+    },
 });
 
 const pollSchema = mongoose.Schema({
