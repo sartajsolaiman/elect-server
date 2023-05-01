@@ -19,18 +19,6 @@ router.post("/register", async(req,res, next) => {
         password:req.body.password
     });
     const { id, firstname, lastname, email, password } = user;
-    // jwt.sign(
-    //   { id, email },
-    //    process.env.SECRET,
-    //    (err, emailToken) => {
-    //     const url = `http://localhost:3001/confirmation/${emailToken}`;
-
-    //     transporter.sendMail({
-    //       to: email,
-    //       subject: 'Confirm Email',
-    //       html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
-    //     });
-    //   });
 
        
         const token = jwt.sign(

@@ -14,6 +14,7 @@ app.use(cors());
 const mongoose = require("mongoose");
 const routeAuth = require("./routes/auth");
 const routePoll = require("./routes/poll");
+const routeVote = require("./routes/vote");
 const bodyParser = require("body-parser");
 const sendMail = require("./middlewares/sendMail");
 const confirmMail = require("./middlewares/confirmMail");
@@ -36,6 +37,7 @@ app.use(bodyParser.urlencoded({extended : false}));
 
 app.use('/api/auth',routeAuth);
 app.use('/api/poll',routePoll);
+app.use('/api/vote',routeVote);
 app.use('/api/mail/',sendMail);
 
 

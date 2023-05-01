@@ -4,6 +4,7 @@ const routerPoll = require('express').Router();
 const jwt = require('jsonwebtoken');
 const e = require("express");
 const checkLogin = require("../middlewares/checkLogin");
+const crypto = require('crypto');
 
 const Poll = mongoose.model("Poll");
 const User = mongoose.model("Demo");
@@ -60,6 +61,95 @@ routerPoll.post("/add_poll", checkLogin, async(req,res, next) => {
       message: err.message,
     })
   }
+});
+
+routerPoll.put("/addVote/:electId/:voterId/:option", async(req,res, next) =>{
+  
+  // console.log(req.params.electId)
+  // console.log(req.params.option)
+  try{
+    
+    const temp = await Poll.findOne({ _id: req.params.electId});
+    if((temp.endTime - Date.now()) > 0){
+      const poll = await Poll.findOne({ "_id": req.params.electId, 'voter.voterid': req.params.voterId }, { 'voter.$': 1 })
+      console.log("kuk")
+      console.log(poll.voter[0].voted)
+      if(!poll.voter[0].voted){
+        console.log("kuk")
+        await Poll.updateOne({
+          "_id": req.params.electId,
+          "options.option": req.params.option     
+        }, {
+          $inc: {
+              "options.$.votes": 1
+          },
+          
+        });
+    
+        await Poll.updateOne({
+          "_id": req.params.electId,
+          "voter.voterid": req.params.voterId     
+        }, 
+          {
+              "voter.$.voted": true
+          });
+      }else {
+        console.log("kuk")
+        return res.json({
+          status: "voted"
+        });
+      }
+      
+    }else {
+      return res.json({
+        status: "finished"
+      });
+    }
+   
+  }catch(err){
+    return next({
+      status: 400,
+      message: err.message,
+    })
+  }
+});
+
+routerPoll.get("/result/:electId", checkLogin, async(req,res, next) =>{
+  
+  // console.log(req.params.electId)
+  // console.log(req.params.option)
+  try{
+    
+    const poll = await Poll.findOne({ _id: req.params.electId});
+    const {endTime, options} = poll;
+    console.log(options)
+    if((endTime - Date.now()) > 0){
+      return res.json({
+        status: "notok"
+      })
+    }else {
+      return res.json({
+        status: "ok",
+        options
+      })
+    }
+   
+  }catch(err){
+    return next({
+      status: 400,
+      message: err.message,
+    })
+  }
+});
+
+routerPoll.get("/generate", async(req,res, next) =>{
+  
+  // console.log(req.params.electId)
+  // console.log(req.params.option)
+  const id = crypto.randomBytes(Math.ceil(8/2)).toString('hex').slice(0, 8);
+  return res.json({
+    id: id
+  })
 });
 
 
