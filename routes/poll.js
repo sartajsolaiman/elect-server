@@ -25,7 +25,9 @@ routerPoll.post("/add_poll", checkLogin, async(req,res, next) => {
       _id: req.id
     });
     if (!user.confirmed) {
-      throw new Error('Please confirm your email to login');
+      return res.json({
+        status: "notconfirmed"
+      });
     }
     const poll = await Poll.create({
         title: req.body.title,
@@ -76,23 +78,36 @@ routerPoll.put("/addVote/:electId/:voterId/:option", async(req,res, next) =>{
       console.log(poll.voter[0].voted)
       if(!poll.voter[0].voted){
         console.log("kuk")
-        await Poll.updateOne({
-          "_id": req.params.electId,
-          "options.option": req.params.option     
-        }, {
-          $inc: {
-              "options.$.votes": 1
-          },
-          
-        });
-    
-        await Poll.updateOne({
-          "_id": req.params.electId,
-          "voter.voterid": req.params.voterId     
-        }, 
-          {
-              "voter.$.voted": true
+        try {
+          await Poll.updateOne({
+            "_id": req.params.electId,
+            "options.option": req.params.option     
+          }, {
+            $inc: {
+                "options.$.votes": 1
+            },
+            
           });
+      
+          await Poll.updateOne({
+            "_id": req.params.electId,
+            "voter.voterid": req.params.voterId     
+          }, 
+            {
+                "voter.$.voted": true
+            });
+
+            return res.json({
+              status: "success"
+            });
+        } catch (error) {
+          return res.json({
+            status: "failed"
+          });
+        }
+        
+
+          
       }else {
         console.log("kuk")
         return res.json({
