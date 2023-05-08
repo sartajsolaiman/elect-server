@@ -58,9 +58,10 @@ const sendMail = async (req, res) => {
           pass: process.env.GMAIL_PASS
       }
   });
+  
+const sendMessage = async() => {
   try{
-
-    let info = await transporter.sendMail({
+    await transporter.sendMail({
       from: 'ElectMe<elect.me5160@gmail.com>', // sender address
       to: vmail, // list of receivers
       subject: "Elect Me voter info", // Subject line
@@ -72,6 +73,7 @@ const sendMail = async (req, res) => {
   }catch(err){
     console.log(err)
   }
+}
   
 
 //   transporter.sendMail((err) =>{
