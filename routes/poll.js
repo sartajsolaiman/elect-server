@@ -65,6 +65,63 @@ routerPoll.post("/add_poll", checkLogin, async(req,res, next) => {
   }
 });
 
+routerPoll.put("/addvoter/:electId/:votermail/:voterid", async(req,res, next) => {
+  // console.log(req.body.voter)
+  // console.log(req.body.title)
+  // console.log(req.body.startTime)
+  // console.log(req.body.endTime)
+  // console.log(req.body.question)
+  // console.log(req.body.options)
+  // console.log(req.id);
+  console.log("first")
+  console.log(req.params)
+  
+try{
+  // const user = await User.findOne({
+  //   _id: req.id
+  // });
+  // if (!user.confirmed) {
+  //   return res.json({
+  //     status: "notconfirmed"
+  //   });
+  // }
+  const temp = await Poll.findOne({ _id: req.params.electId});
+    if((temp.startTime - Date.now())>0){
+    await Poll.updateOne({
+      _id: req.params.electId
+      
+    }, {
+      $push: {
+          voter: {
+            votermail: req.params.votermail,
+            voterid: req.params.voterid
+          }
+      }
+    });
+    return res.json({
+          status: "ok"
+        });
+  }else{
+    return res.json({
+      status: "notok"
+    });
+  }
+
+  // const { id, title, startTime, endTime, voter, question, options} = poll;
+
+  // //return res.status(201).json({poll.title});
+
+  // return res.status(201).json({
+  //     id, voter
+  // });
+}catch (err) {
+  return next({
+    status: 400,
+    message: err.message,
+  })
+}
+});
+
 routerPoll.put("/addVote/:electId/:voterId/:option", async(req,res, next) =>{
   
   // console.log(req.params.electId)
@@ -148,6 +205,27 @@ routerPoll.get("/result/:electId", checkLogin, async(req,res, next) =>{
         options
       })
     }
+   
+  }catch(err){
+    return next({
+      status: 400,
+      message: err.message,
+    })
+  }
+});
+
+routerPoll.get("/voterlist/:electId", checkLogin, async(req,res, next) =>{
+  
+  // console.log(req.params.electId)
+  // console.log(req.params.option)
+  try{
+    
+    const poll = await Poll.findOne({ _id: req.params.electId});
+    const {voter} = poll;
+    console.log(voter)
+    return res.status(200).json({
+      voter
+    })
    
   }catch(err){
     return next({
