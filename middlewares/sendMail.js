@@ -52,35 +52,76 @@ const sendMail = async (req, res) => {
 
   // connect with the smtp
   const transporter = nodemailer.createTransport({
-      service: "gmail",
+      // service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
           user: process.env.GMAIL_USER,
           pass: process.env.GMAIL_PASS
+      },
+      timeout: 120000
+  });
+
+  await new Promise((resolve, reject) => {
+    // verify connection configuration
+    transporter.verify(function (error, success) {
+        if (error) {
+            console.log(error);
+            reject(error);
+        } else {
+            console.log("Server is ready to take our messages");
+            resolve(success);
+        }
+    });
+});
+
+const mailData = {
+    from: 'ElectMe<elect.me5160@gmail.com>', // sender address
+    to: vmail, // list of receivers
+    subject: "Elect Me voter info", // Subject line
+    text: "Election ID: "+eid+" \n Voter ID: "+vid, // plain text body
+    // html: "<b>Election ID: ${id}</b>", // html body
+}
+
+await new Promise((resolve, reject) => {
+  // send mail
+  transporter.sendMail(mailData, (err, info) => {
+      if (err) {
+          console.error(err);
+          reject(err);
+      } else {
+          console.log(info);
+          resolve(info);
       }
   });
+});
+
+res.status(200).json({ status: "OK" });
+};
   
-const sendMessage = async() => {
-  try{
-    await transporter.sendMail({
-      from: 'ElectMe<elect.me5160@gmail.com>', // sender address
-      to: vmail, // list of receivers
-      subject: "Elect Me voter info", // Subject line
-      text: "Election ID: "+eid+" \n Voter ID: "+vid, // plain text body
-      // html: "<b>Election ID: ${id}</b>", // html body
+// const sendMessage = async() => {
+//   try{
+//     await transporter.sendMail({
+//       from: 'ElectMe<elect.me5160@gmail.com>', // sender address
+//       to: vmail, // list of receivers
+//       subject: "Elect Me voter info", // Subject line
+//       text: "Election ID: "+eid+" \n Voter ID: "+vid, // plain text body
+//       // html: "<b>Election ID: ${id}</b>", // html body
       
-    });
-    console.log(info.to)
-  }catch(err){
-    console.log(err)
-  }
-}
+//     });
+//     console.log(info.to)
+//   }catch(err){
+//     console.log(err)
+//   }
+// }
   
 
 //   transporter.sendMail((err) =>{
 //     if(err) console.log("error occured")
 //     else console.log("email sent")
 // })
-};
+// };
 
 
 
