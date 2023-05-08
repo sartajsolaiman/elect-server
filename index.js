@@ -8,7 +8,7 @@ const app = express();
 
 const cors = require('cors');
 
-// app.use(cors());
+app.use(cors());
 
 //importing mongoose and body parser
 const mongoose = require("mongoose");
