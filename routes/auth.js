@@ -26,7 +26,7 @@ router.post("/register", async(req,res, next) => {
            process.env.SECRET,
         );
 
-        const url = `http://localhost:3001/api/auth/confirmation/${token}`;
+        const url = `https://plum-curious-katydid.cyclic.app/api/auth/confirmation/${token}`;
 
         const transporter = nodemailer.createTransport({
           service: "gmail",
