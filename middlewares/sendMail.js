@@ -54,12 +54,12 @@ const sendMail = async (req, res) => {
   const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_PASS
+          user: 'elect.me5160@gmail.com',
+          pass: 'ojwubdbphslrbnsr'
       }
   });
   try{
-
+console.log("first")
     let info = await transporter.sendMail({
       from: 'ElectMe<elect.me5160@gmail.com>', // sender address
       to: vmail, // list of receivers
