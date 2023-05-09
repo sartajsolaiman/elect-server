@@ -28,6 +28,7 @@ routerVote.post("/login", async(req,res, next) => {
 
           const temp = await Poll.findOne({ _id: req.body.electId});
           console.log(temp.startTime)
+          console.log(Date.now())
           if((temp.startTime - Date.now())<=0){
             if((temp.endTime - Date.now() > 0)){
 
