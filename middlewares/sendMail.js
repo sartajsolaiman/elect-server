@@ -5,9 +5,9 @@ const { default: mongoose } = require("mongoose");
 const collection = require("../models/pollModel");
 const Poll = mongoose.model("Poll");
 const router = require('express').Router();
+require('dotenv').config()
 
-function sendMail(envVar1, envVar2){
-    return async (req, res) => {
+const sendMail = async (req, res) => {
     let vmail = []
     const eid = req.query.eid
     const vid = req.query.vid
@@ -55,8 +55,8 @@ function sendMail(envVar1, envVar2){
   const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-          user: envVar1,
-          pass: envVar2
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_PASS
       }
   });
   try{
@@ -80,7 +80,6 @@ console.log("first")
 //     else console.log("email sent")
 // })
 };
-}
 
 
 
