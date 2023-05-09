@@ -35,7 +35,6 @@ routerVote.post("/login", async(req,res, next) => {
           const now =  moment(moment().add(6, 'hours'), 'lll')
           const timeStart = start.diff(now, 'milliseconds')
           const timeEnd = end.diff(now, 'milliseconds')
-          console.log(time)
 
           if(timeStart<=0){
             if(timeEnd > 0){
