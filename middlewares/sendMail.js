@@ -5,7 +5,6 @@ const { default: mongoose } = require("mongoose");
 const collection = require("../models/pollModel");
 const Poll = mongoose.model("Poll");
 const router = require('express').Router();
-require('dotenv').config()
 
 const sendMail = async (req, res) => {
     let vmail = []
@@ -55,8 +54,8 @@ const sendMail = async (req, res) => {
   const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_PASS
+          user: 'elect.me5160@gmail.com',
+          pass: 'ojwubdbphslrbnsr'
       }
   });
   try{
