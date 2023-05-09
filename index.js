@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({extended : false}));
 app.use('/api/auth',routeAuth);
 app.use('/api/poll',routePoll);
 app.use('/api/vote',routeVote);
-app.use('/api/mail/',sendMail);
+app.use('/api/mail/',sendMail(process.env.GMAIL_USER, process.env.GMAIL_PASS));
 
 
 

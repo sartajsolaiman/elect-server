@@ -6,7 +6,8 @@ const collection = require("../models/pollModel");
 const Poll = mongoose.model("Poll");
 const router = require('express').Router();
 
-const sendMail = async (req, res) => {
+function sendMail(envVar1, envVar2){
+    return async (req, res) => {
     let vmail = []
     const eid = req.query.eid
     const vid = req.query.vid
@@ -54,8 +55,8 @@ const sendMail = async (req, res) => {
   const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-          user: 'elect.me5160@gmail.com',
-          pass: 'ojwubdbphslrbnsr'
+          user: envVar1,
+          pass: envVar2
       }
   });
   try{
@@ -79,6 +80,7 @@ console.log("first")
 //     else console.log("email sent")
 // })
 };
+}
 
 
 
