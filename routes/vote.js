@@ -28,12 +28,12 @@ routerVote.post("/login", async(req,res, next) => {
           // });
 
           const temp = await Poll.findOne({ _id: req.body.electId});
-          console.log(temp.startTime)
+          console.log(moment(temp.startTime).format('lll'))
           console.log(moment().subtract(6, 'hours').format('lll a'))
-          console.log(temp.startTime - moment().subtract(6, 'hours').format('lll a'))
+          console.log(moment(temp.startTime).format('lll') - moment().subtract(6, 'hours').format('lll'))
 
-          if((temp.startTime - moment().subtract(6, 'hours').format('lll a'))<=0){
-            if((temp.endTime - moment().subtract(6, 'hours').format('lll a') > 0)){
+          if((temp.startTime - moment().subtract(6, 'hours').format('lll'))<=0){
+            if((temp.endTime - moment().subtract(6, 'hours').format('lll') > 0)){
 
               Poll.findOne({ "_id": req.body.electId, 'voter.voterid': req.body.voterId }, { 'voter.$': 1 })
               .then(poll => {
