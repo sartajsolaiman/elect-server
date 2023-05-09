@@ -4,6 +4,7 @@ const routerVote = require('express').Router();
 const jwt = require('jsonwebtoken');
 const e = require("express");
 const checkLogin = require("../middlewares/checkLogin");
+const moment = require('moment');
 
 const Poll = mongoose.model("Poll");
 
@@ -28,9 +29,10 @@ routerVote.post("/login", async(req,res, next) => {
 
           const temp = await Poll.findOne({ _id: req.body.electId});
           console.log(temp.startTime)
-          console.log(Date.now())
-          if((temp.startTime - Date.now())<=0){
-            if((temp.endTime - Date.now() > 0)){
+          console.log(moment())
+
+          if((temp.startTime - moment())<=0){
+            if((temp.endTime - moment() > 0)){
 
               Poll.findOne({ "_id": req.body.electId, 'voter.voterid': req.body.voterId }, { 'voter.$': 1 })
               .then(poll => {
