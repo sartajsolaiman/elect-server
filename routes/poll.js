@@ -87,7 +87,10 @@ try{
   //   });
   // }
   const temp = await Poll.findOne({ _id: req.params.electId});
-    if((temp.startTime - moment().subtract(6, 'hours'))>0){
+    const start = moment(temp.startTime, 'lll')
+    const now =  moment(moment().add(6, 'hours'), 'lll')
+    const timeStart = start.diff(now, 'milliseconds')
+    if(timeStart>0){
     await Poll.updateOne({
       _id: req.params.electId
       
@@ -130,7 +133,10 @@ routerPoll.put("/addVote/:electId/:voterId/:option", async(req,res, next) =>{
   try{
     
     const temp = await Poll.findOne({ _id: req.params.electId});
-    if((temp.endTime - moment().subtract(6, 'hours')) > 0){
+          const end = moment(temp.endTime, 'lll')
+          const now =  moment(moment().add(6, 'hours'), 'lll')
+          const timeEnd = end.diff(now, 'milliseconds')
+    if(timeEnd > 0){
       const poll = await Poll.findOne({ "_id": req.params.electId, 'voter.voterid': req.params.voterId }, { 'voter.$': 1 })
       console.log("kuk")
       console.log(poll.voter[0].voted)
@@ -194,9 +200,14 @@ routerPoll.get("/result/:electId", checkLogin, async(req,res, next) =>{
   try{
     
     const poll = await Poll.findOne({ _id: req.params.electId});
+    
     const {endTime, options} = poll;
     console.log(options)
-    if((endTime - moment().subtract(6, 'hours')) > 0){
+
+          const end = moment(endTime, 'lll')
+          const now =  moment(moment().add(6, 'hours'), 'lll')
+          const timeEnd = end.diff(now, 'milliseconds')
+    if(timeEnd > 0){
       return res.json({
         status: "notok"
       })
