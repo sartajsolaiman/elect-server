@@ -31,8 +31,8 @@ routerVote.post("/login", async(req,res, next) => {
           console.log(moment(temp.startTime).format('lll'))
           console.log(moment().add(6, 'hours').format('lll'))
           const start = moment(temp.startTime, 'lll')
-          const now =  moment().add(6, 'hours').format('lll')
-          const time = start.subtract(now)
+          const now =  moment(moment().add(6, 'hours'), 'lll')
+          const time = start.diff(now, "hours")
           console.log(time)
 
           if((temp.startTime - moment().subtract(6, 'hours').format('lll'))<=0){
