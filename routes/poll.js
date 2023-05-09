@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const e = require("express");
 const checkLogin = require("../middlewares/checkLogin");
 const crypto = require('crypto');
+const moment = require('moment');
 
 const Poll = mongoose.model("Poll");
 const User = mongoose.model("Demo");
@@ -86,7 +87,7 @@ try{
   //   });
   // }
   const temp = await Poll.findOne({ _id: req.params.electId});
-    if((temp.startTime - Date.now())>0){
+    if((temp.startTime - moment().subtract(6, 'hours'))>0){
     await Poll.updateOne({
       _id: req.params.electId
       
@@ -129,7 +130,7 @@ routerPoll.put("/addVote/:electId/:voterId/:option", async(req,res, next) =>{
   try{
     
     const temp = await Poll.findOne({ _id: req.params.electId});
-    if((temp.endTime - Date.now()) > 0){
+    if((temp.endTime - moment().subtract(6, 'hours')) > 0){
       const poll = await Poll.findOne({ "_id": req.params.electId, 'voter.voterid': req.params.voterId }, { 'voter.$': 1 })
       console.log("kuk")
       console.log(poll.voter[0].voted)
@@ -195,7 +196,7 @@ routerPoll.get("/result/:electId", checkLogin, async(req,res, next) =>{
     const poll = await Poll.findOne({ _id: req.params.electId});
     const {endTime, options} = poll;
     console.log(options)
-    if((endTime - Date.now()) > 0){
+    if((endTime - moment().subtract(6, 'hours')) > 0){
       return res.json({
         status: "notok"
       })
