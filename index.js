@@ -35,11 +35,6 @@ async function main() {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 
-app.use((req, res, next) => {
-  res.setHeader('Cache-Control','no-cache');
-  next();
-});
-
 app.use('/api/auth',routeAuth);
 app.use('/api/poll',routePoll);
 app.use('/api/vote',routeVote);

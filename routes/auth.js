@@ -111,6 +111,7 @@ router.post("/getuser", async(req,res, next) => {
 
 router.get("/polls", checkLogin, async(req,res, next) =>  {
   console.log("first")
+  res.setHeader('Cache-Control','no-cache');
   try {
       const users = await User.findOne({
         _id: req.id
