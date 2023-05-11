@@ -36,6 +36,7 @@ async function main() {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
+app.use('etag', false);
 
 app.use('/api/auth',routeAuth);
 app.use('/api/poll',routePoll);

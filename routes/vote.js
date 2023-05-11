@@ -76,6 +76,7 @@ routerVote.post("/login", async(req,res, next) => {
 
 
 routerVote.get("/poll/:electId", async(req,res, next) =>  {
+  res.set('Cache-Control','no-cache, no-store, must-revalidate, proxy-revalidate');
   console.log("hi")
   console.log(req.params.electId)
   try {
