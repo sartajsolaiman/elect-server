@@ -78,7 +78,7 @@ routerVote.post("/login", async(req,res, next) => {
 routerVote.get("/poll/:electId", async(req,res, next) =>  {
   console.log("hi")
   console.log(req.params.electId)
-  res.set('Cache-Control','no-cache');
+  res.set('Cache-Control','no-store');
   try {
       const poll = await Poll.findOne({
         _id: req.params.electId

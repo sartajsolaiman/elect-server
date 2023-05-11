@@ -20,7 +20,6 @@ const sendMail = require("./middlewares/sendMail");
 const confirmMail = require("./middlewares/confirmMail");
 const jwt = require('jsonwebtoken');
 const User = mongoose.model("Demo");
-const cacheControl = require('cache-control');
 
 
 
@@ -37,7 +36,6 @@ async function main() {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
-app.use(cacheControl({ noCache: true }));
 
 app.use('/api/auth',routeAuth);
 app.use('/api/poll',routePoll);
