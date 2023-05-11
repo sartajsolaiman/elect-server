@@ -110,7 +110,7 @@ router.post("/getuser", async(req,res, next) => {
 });
 
 router.get("/polls", checkLogin, async(req,res, next) =>  {
-  console.log("first")
+  // console.log("first")
   try {
       const users = await User.findOne({
         _id: req.id
