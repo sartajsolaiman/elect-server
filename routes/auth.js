@@ -116,7 +116,7 @@ router.get("/polls", checkLogin, async(req,res, next) =>  {
         _id: req.id
       }).populate("polls");
       const {polls} = users
-
+      console.log("hi")
       res.status(200).json({
           polls
       });
