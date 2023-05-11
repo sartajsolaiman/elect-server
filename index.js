@@ -20,6 +20,9 @@ const sendMail = require("./middlewares/sendMail");
 const confirmMail = require("./middlewares/confirmMail");
 const jwt = require('jsonwebtoken');
 const User = mongoose.model("Demo");
+const cacheControl = require('cache-control');
+app.use(cacheControl({ noCache: true }));
+
 
 let confrimation = false;
 
