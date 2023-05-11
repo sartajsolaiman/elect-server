@@ -75,7 +75,7 @@ routerVote.post("/login", async(req,res, next) => {
 });
 
 
-routerVote.get("/poll/:electId/", async(req,res, next) =>  {
+routerVote.get("/poll/:electId", async(req,res, next) =>  {
   console.log("hi")
   console.log(req.params.electId)
   try {
