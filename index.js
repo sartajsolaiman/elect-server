@@ -20,6 +20,7 @@ const sendMail = require("./middlewares/sendMail");
 const confirmMail = require("./middlewares/confirmMail");
 const jwt = require('jsonwebtoken');
 const User = mongoose.model("Demo");
+const nocache = require('nocache');
 
 
 
@@ -33,10 +34,10 @@ main()
 async function main() {
   await mongoose.connect("mongodb+srv://SartajSolaiman:iamssd221B@cluster0.ly1vndf.mongodb.net/test");
 }
-
+app.set('etag', false);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
-app.set('etag', false);
+app.use(nocache());
 
 app.use('/api/auth',routeAuth);
 app.use('/api/poll',routePoll);
