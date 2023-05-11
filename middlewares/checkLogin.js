@@ -12,11 +12,15 @@ const checkLogin = (req, res, next) => {
         console.log(token)
         let decoded = jwt.verify(token, process.env.SECRET);
         console.log("first")
-        let { id, email } = decoded;
-        req.email = email;
-        req.id = id;
-        console.log(req.email)
-        next();
+        if(decoded){
+            let { id, email } = decoded;
+            req.email = email;
+            req.id = id;
+            console.log(req.email)
+            next();
+        }else{
+            res.redirect('/signin');
+        }
     } catch(err) {
         next("Authentication failure!");
     }
