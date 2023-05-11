@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const e = require("express");
 const checkLogin = require("../middlewares/checkLogin");
 const nodemailer = require("nodemailer");
+const cors = require('cors');
 
 const User = mongoose.model("Demo");
 
@@ -109,7 +110,7 @@ router.post("/getuser", async(req,res, next) => {
   }
 });
 
-router.get("/polls", checkLogin, async(req,res, next) =>  {
+router.get("/polls", checkLogin, cors(), async(req,res, next) =>  {
   console.log("first")
   try {
       const users = await User.findOne({
