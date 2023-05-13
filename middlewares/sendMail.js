@@ -64,7 +64,7 @@ console.log("first")
       from: 'ElectMe<elect.me5160@gmail.com>', // sender address
       to: vmail, // list of receivers
       subject: "Elect Me voter info", // Subject line
-      text: "Election ID: "+eid+" \n Voter ID: "+vid, // plain text body
+      text: "Election ID: "+eid+" \n Voter ID: "+vid+"\n Click here to login as a voter: https://elect-me-ohxq.vercel.app/vote", // plain text body
       // html: "<b>Election ID: ${id}</b>", // html body
       
     });
